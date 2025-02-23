@@ -85,7 +85,7 @@ class _HomeState extends State<HomeScreen> with SingleTickerProviderStateMixin {
                   height: 200,
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(45),
                     boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 10)],
                   ),
                   alignment: Alignment.center,
