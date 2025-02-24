@@ -5,6 +5,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -23,7 +24,8 @@ class _HomeState extends State<HomeScreen> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(vsync: this, duration: Duration(milliseconds: 300));
+    _controller =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 300));
     _animation = Tween<double>(begin: 0, end: 1).animate(_controller);
     loadWords();
   }
@@ -47,7 +49,6 @@ class _HomeState extends State<HomeScreen> with SingleTickerProviderStateMixin {
     });
   }
 
-
   void flipCard() {
     if (_controller.isAnimating) return;
     if (isFlipped) {
@@ -63,51 +64,74 @@ class _HomeState extends State<HomeScreen> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('日本語のい形容詞'),),
+      appBar: AppBar(
+        title: Text(
+          '日本語のい形容詞',
+          style: GoogleFonts.zenMaruGothic(),
+        ),
+      ),
       body: Center(
         child: words.isEmpty
             ? CircularProgressIndicator()
             : GestureDetector(
-          onTap: flipCard,
-          child: AnimatedBuilder(
-            animation: _animation,
-            builder: (context, child) {
-              double angle = _animation.value * pi;
-              bool isBack = angle > pi / 2;
+                onTap: flipCard,
+                child: AnimatedBuilder(
+                  animation: _animation,
+                  builder: (context, child) {
+                    double angle = _animation.value * pi;
+                    bool isBack = angle > pi / 2;
 
-              return Transform(
-                alignment: Alignment.center,
-                transform: Matrix4.identity()
-                  ..setEntry(3, 2, 0.002) // 3D 효과
-                  ..rotateY(angle),
-                child: Container(
-                  width: 300,
-                  height: 200,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(45),
-                    boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 10)],
-                  ),
-                  alignment: Alignment.center,
-                  child: isBack
-                      ? Transform(
-                    alignment: Alignment.center,
-                    transform: Matrix4.rotationY(pi),
-                    child: Text(
-                      "${currentWord?.hiragana ?? "???"}\n(${currentWord?.meaning ?? "의미 없음"})",
-                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.center,
-                    ),
-                  )
-                      : Text(
-                    currentWord?.kanji ?? "로딩 중...",
-                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-                  ),
+                    return Transform(
+                      alignment: Alignment.center,
+                      transform: Matrix4.identity()
+                        ..setEntry(3, 2, 0.002) // 3D 효과
+                        ..rotateY(angle),
+                      child: Container(
+                        width: 300,
+                        height: 200,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(45),
+                          boxShadow: [
+                            BoxShadow(color: Colors.black26, blurRadius: 10)
+                          ],
+                        ),
+                        alignment: Alignment.center,
+                        child: isBack
+                            ? Transform(
+                                alignment: Alignment.center,
+                                transform: Matrix4.rotationY(pi),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      currentWord?.hiragana ?? "???",
+                                      textAlign: TextAlign.center,
+                                      style: GoogleFonts.zenMaruGothic(
+                                        fontSize: 24,
+                                      ),
+                                    ),
+                                    Text(
+                                      currentWord?.meaning ?? "의미 없음",
+                                      textAlign: TextAlign.center,
+                                      style: GoogleFonts.nanumGothicCoding(
+                                        fontSize: 24,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            : Text(
+                                currentWord?.kanji ?? "로딩 중...",
+                                style: GoogleFonts.zenMaruGothic(
+                                  fontSize: 24,
+                                ),
+                              ),
+                      ),
+                    );
+                  },
                 ),
-              );
-            },
-          ),
-        ),
+              ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: showRandomWord,
@@ -115,6 +139,7 @@ class _HomeState extends State<HomeScreen> with SingleTickerProviderStateMixin {
       ),
     );
   }
+
   @override
   void dispose() {
     // TODO: implement dispose
